@@ -18,6 +18,7 @@ public class LeafTest {
     public void allocateOutOfSpace() throws OutOfSpaceException{
         leaf = new Leaf("leaf",12);
         assertEquals("leaf",leaf.name);
+        assertEquals(0,FileSystem.fileStorage.countFreeSpace());
 
     }
 
@@ -25,11 +26,10 @@ public class LeafTest {
     public void allocate() throws OutOfSpaceException{
         leaf = new Leaf("leaf",2);
         assertEquals("leaf",leaf.name);
+        assertEquals(8,FileSystem.fileStorage.countFreeSpace());
         Leaf leaf1 = new Leaf("leaf1",7);
         String[] path = {"leaf1"};
-//        assertNotNull(fileSystem.FileExists(path));
-
-
+        assertEquals(1,FileSystem.fileStorage.countFreeSpace());
 
     }
 }
