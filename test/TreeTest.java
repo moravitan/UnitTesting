@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class TreeTest {
 
-    private Tree tree;
+    private  Tree tree;
 
 
     @Before
@@ -33,6 +33,9 @@ public class TreeTest {
         assertEquals(root.parent,tree);
         Tree existedNewTree = tree.GetChildByName("root");
         assertEquals(root,existedNewTree);
+        Tree firstSon = new Tree("firstSon");
+        tree.children.put("firstSon",firstSon);
+        assertEquals(firstSon,tree.GetChildByName("firstSon"));
     }
 
     @Test
