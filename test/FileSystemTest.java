@@ -10,7 +10,9 @@ public class FileSystemTest {
     @Before
     public void setUp() {
         fileSystem = new FileSystem(10);
+//        FileSystem.fileStorage
     }
+
 
     @Test
     public void initial(){
