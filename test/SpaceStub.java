@@ -1,5 +1,4 @@
-
-public class SpaceStub extends Space{
+public class SpaceStub extends Space {
 
     /**
      * Ctor - create \c size blank filesystem blocks.
