@@ -58,4 +58,27 @@ public class FileSystemTest {
         fileSystem.file(path,1);
         assertNotNull(fileSystem.FileExists(path));
     }
+
+    @Test
+    public void diskAlloc() throws OutOfSpaceException, BadFileNameException {
+        String[][] path = {null,null,null,null,null,null,null,null,null,null};
+        assertArrayEquals(path, fileSystem.disk());
+        String[] pathFile = {"root","file1","dir1"};
+        fileSystem.file(pathFile, 1);
+        path = new String[][]{{"root", "file1", "dir1"}, null, null, null, null, null, null, null, null, null};
+        assertArrayEquals(path, fileSystem.disk());
+    }
+
+    @Test
+    public void removeFileAndCreate () throws BadFileNameException, OutOfSpaceException {
+        String[] pathFile1 = {"root","file1","dir1"};
+        fileSystem.file(pathFile1, 3);
+        assertNotNull(fileSystem.FileExists(pathFile1));
+        assertEquals(7, FileSystem.fileStorage.countFreeSpace());
+        String[] pathFile2 = {"root","file1","dir1"};
+        fileSystem.file(pathFile2, 8);
+        assertNotNull(fileSystem.FileExists(pathFile2));
+        assertEquals(2, FileSystem.fileStorage.countFreeSpace());
+    }
+
 }
