@@ -5,31 +5,30 @@ import static org.junit.Assert.*;
 
 public class LeafTest {
 
-     Leaf leaf;
-     FileSystem fileSystem;
 
     @Before
     public void setUp() {
-        fileSystem = new FileSystem(10);
+        FileSystem.fileStorage = new SpaceStub(10);
     }
 
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = OutOfSpaceException.class)
     public void allocateOutOfSpace() throws OutOfSpaceException{
-        leaf = new Leaf("leaf",12);
+        Leaf leaf = new Leaf("leaf",12);
         assertEquals("leaf",leaf.name);
-        assertEquals(0,FileSystem.fileStorage.countFreeSpace());
+        assertEquals(10,FileSystem.fileStorage.countFreeSpace());
 
     }
 
-    @Test
+    @Test(expected = OutOfSpaceException.class)
     public void allocate() throws OutOfSpaceException{
-        leaf = new Leaf("leaf",2);
+        Leaf leaf = new Leaf("leaf",2);
         assertEquals("leaf",leaf.name);
         assertEquals(8,FileSystem.fileStorage.countFreeSpace());
         Leaf leaf1 = new Leaf("leaf1",7);
         String[] path = {"leaf1"};
         assertEquals(1,FileSystem.fileStorage.countFreeSpace());
+        Leaf leaf2 = new Leaf("leaf1",2);
 
     }
 }
