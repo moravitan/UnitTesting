@@ -12,7 +12,6 @@ public class FileSystemTest {
     @Before
     public void setUp() {
         fileSystem = new FileSystem(10);
-//        FileSystem.fileStorage
     }
 
 
@@ -43,6 +42,9 @@ public class FileSystemTest {
         fileSystem.file(pathFile, 1);
         path = new String[][]{{"root", "file1", "dir1"}, null, null, null, null, null, null, null, null, null};
         assertArrayEquals(path, fileSystem.disk());
+        fileSystem.rmfile(pathFile);
+        path = new String[][]{null,null,null,null,null,null,null,null,null,null};
+        assertArrayEquals(path,fileSystem.disk());
     }
 
     @Test(expected = BadFileNameException.class)
@@ -65,7 +67,9 @@ public class FileSystemTest {
         path = new String[]{"root","dir1","file1"};
         fileSystem.file(path,1);
         assertNotNull(fileSystem.FileExists(path));
+        assertNotNull(fileSystem.FileExists(new String[]{"root","file1"}));
     }
+
 
     @Test
     public void removeFileAndCreate () throws BadFileNameException, OutOfSpaceException {
@@ -86,6 +90,17 @@ public class FileSystemTest {
         fileSystem.dir(path);
         String[] pathFile = {"root","dir"};
         fileSystem.file(pathFile, 3);
+    }
+
+
+    @Test
+    public void removeFileAndCreateWithEnoughSpace() throws OutOfSpaceException, BadFileNameException {
+        String[] path = {"root","file1"};
+        fileSystem.file(path, 2);
+        fileSystem.file(path,3);
+        assertNotNull(fileSystem.FileExists(path));
+        assertEquals(7,FileSystem.fileStorage.countFreeSpace());
+
     }
 
     @Test
@@ -111,7 +126,7 @@ public class FileSystemTest {
         assertNull(dirPath);
     }
     @Test
-    public void removeNotExistingFile () throws BadFileNameException, OutOfSpaceException {
+    public void removeNotExistingFile () {
         String[] path = {"file1"};
         fileSystem.rmfile(path);
     }
@@ -164,13 +179,13 @@ public class FileSystemTest {
         assertNull(fileSystem.FileExists(path));
     }
     @Test
-    public void fileNotExists () throws BadFileNameException, OutOfSpaceException {
+    public void fileNotExists () {
         String[] path = {"root","dir"};
         assertNull(fileSystem.FileExists(path));
     }
 
     @Test
-    public void DirExists () throws BadFileNameException, OutOfSpaceException, DirectoryNotEmptyException {
+    public void DirExists () throws BadFileNameException, DirectoryNotEmptyException {
         String[] path = {"root","dir1"};
         fileSystem.dir(path);
         assertNotNull(fileSystem.DirExists(path));
@@ -178,7 +193,7 @@ public class FileSystemTest {
         assertNull(fileSystem.DirExists(path));
     }
     @Test
-    public void DirNotExists () throws BadFileNameException, OutOfSpaceException {
+    public void DirNotExists () {
         String[] path = {"root"};
         assertNull(fileSystem.DirExists(path));
     }
