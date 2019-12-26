@@ -1,47 +1,45 @@
 import org.junit.Before;
 import org.junit.Test;
+import system.Tree;
 
 import static org.junit.Assert.*;
 
 public class TreeTest {
 
-    private  Tree tree;
+    private Tree tree;
 
 
     @Before
     public void setUp() {
-        tree = new Tree("tree");
+        tree = new Tree("root");
 
     }
 
     @Test
     public void initial() {
         assertEquals(0, tree.children.size());
-        assertEquals(0,tree.depth);
         assertNull(tree.parent);
     }
 
     @Test
     public void getChildByName() {
-        Tree root = tree.GetChildByName("root");
-        assertEquals(root,tree.children.get("root"));
-        assertEquals(0,tree.depth);
-        assertEquals(1,root.depth);
-        assertEquals(root.parent,tree);
-        Tree existedNewTree = tree.GetChildByName("root");
-        assertEquals(root,existedNewTree);
-        Tree firstSon = new Tree("firstSon");
-        tree.children.put("firstSon",firstSon);
-        assertEquals(firstSon,tree.GetChildByName("firstSon"));
+        Tree firstSon = tree.GetChildByName("firstSon");
+        assertEquals(firstSon,tree.children.get("firstSon"));
+        assertEquals(firstSon.parent,tree);
+        Tree existedNewTree = tree.GetChildByName("firstSon");
+        assertEquals(firstSon,existedNewTree);
+        Tree secondSon = new Tree("secondSon");
+        tree.children.put("secondSon",secondSon);
+        assertEquals(secondSon,tree.GetChildByName("secondSon"));
     }
 
     @Test
     public void getPath(){
-        Tree root = tree.GetChildByName("root");
-        Tree son = root.GetChildByName("son");
+        Tree father = tree.GetChildByName("father");
+        Tree son = father.GetChildByName("son");
         String[] treePath = son.getPath();
-        String[] expectedPath = {"root","son"};
-        assertArrayEquals(treePath, expectedPath);
+        String[] expectedPath = {"root","father","son"};
+        assertArrayEquals(expectedPath,treePath);
     }
 
 }
