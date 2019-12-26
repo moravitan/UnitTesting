@@ -121,8 +121,7 @@ public class FileSystemTest {
     public void creatingTwoFileSameNameDiffSizeWithNotEnoughSpace() throws BadFileNameException, OutOfSpaceException {
         String[] pathFile = {"root", "dir1", "file1"};
         fileSystem.file(pathFile, 3);
-        String[] pathFile2 = {"root", "dir1", "file1"};
-        fileSystem.file(pathFile2, 8);
+        fileSystem.file(pathFile, 8);
         assertEquals(2,FileSystem.fileStorage.countFreeSpace());
     }
 
@@ -133,6 +132,14 @@ public class FileSystemTest {
         Leaf leaf = fileSystem.FileExists(pathFile);
         fileSystem.file(pathFile, 4);
         assertNotEquals(leaf,fileSystem.FileExists(pathFile));
+    }
+
+    @Test(expected = OutOfSpaceException.class)
+    public void creatingTwoFileSameNameDiffSizeWithNotEnoughSpaceInTheDisk() throws BadFileNameException, OutOfSpaceException {
+        String[] pathFile = {"root", "dir1", "file1"};
+        fileSystem.file(pathFile, 3);
+        fileSystem.FileExists(pathFile);
+        fileSystem.file(pathFile, 11);
     }
 
 
