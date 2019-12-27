@@ -134,6 +134,8 @@ public class FileSystemTest {
         assertNotEquals(leaf,fileSystem.FileExists(pathFile));
     }
 
+    //*********************** START RED SUITS TEST ***********************
+
     @Test(expected = OutOfSpaceException.class)
     public void creatingTwoFileSameNameDiffSizeWithNotEnoughSpaceInTheDisk() throws BadFileNameException, OutOfSpaceException {
         String[] pathFile = {"root", "dir1", "file1"};
@@ -141,6 +143,8 @@ public class FileSystemTest {
         fileSystem.FileExists(pathFile);
         fileSystem.file(pathFile, 11);
     }
+
+    //*********************** END RED SUITS TEST ***********************
 
 
     // trying to create a file with the same name of existing directory
