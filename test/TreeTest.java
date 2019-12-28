@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import system.Tree;
@@ -33,13 +34,27 @@ public class TreeTest {
         assertEquals(secondSon,tree.GetChildByName("secondSon"));
     }
 
+    //*********************** START RED SUITS TEST ***********************
+
+
+    /**
+     * Assuming getPath should contain 'root'
+     */
     @Test
     public void getPath(){
-        Tree father = tree.GetChildByName("father");
-        Tree son = father.GetChildByName("son");
-        String[] treePath = son.getPath();
-        String[] expectedPath = {"root","father","son"};
-        assertArrayEquals(expectedPath,treePath);
+        try{
+            Tree father = tree.GetChildByName("father");
+            Tree son = father.GetChildByName("son");
+            String[] treePath = son.getPath();
+            String[] expectedPath = {"root","father","son"};
+            assertEquals("root",treePath[0]);
+            assertArrayEquals(expectedPath,treePath);
+        } catch (Exception e){
+            Assert.fail("expected arrays equals, got " + e.getMessage());
+        }
     }
+
+    //*********************** END RED SUITS TEST ***********************
+
 
 }

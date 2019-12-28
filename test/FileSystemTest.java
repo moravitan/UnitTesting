@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import system.*;
@@ -38,16 +39,29 @@ public class FileSystemTest {
     //*********************** START RED SUITS TEST ***********************
 
     @Test
-    public void creatingExistingDir() throws BadFileNameException {
-        String[] path = {"root","dir1"};
-        fileSystem.dir(path);
-        Tree dir = fileSystem.DirExists(path);
-        fileSystem.dir(path);
-        assertEquals(dir,fileSystem.DirExists(path));
+    public void creatingExistingDir() {
+        try{
+            String[] path = {"root","dir1"};
+            fileSystem.dir(path);
+            Tree dir = fileSystem.DirExists(path);
+            fileSystem.dir(path);
+            assertEquals(dir,fileSystem.DirExists(path));
+        }
+        catch (Exception e){
+            Assert.fail("Expected nothing, got " + e.getMessage());
+        }
+
     }
 
     //*********************** END RED SUITS TEST ***********************
 
+
+    @Test (expected = BadFileNameException.class)
+    public void creatingDirSameNameAsExistingFile() throws BadFileNameException, OutOfSpaceException {
+        String[] path = {"root","dir1"};
+        fileSystem.file(path, 1);
+        fileSystem.dir(path);
+    }
 
     @Test
     public void diskAllocSmallFile() throws OutOfSpaceException, BadFileNameException {
@@ -95,8 +109,10 @@ public class FileSystemTest {
         String[] path = {"root", "file1"};
         fileSystem.file(path, 2);
         assertNotNull(fileSystem.FileExists(path));
-        path = new String[]{"root", "dir1", "file1"};
         assertEquals(8, FileSystem.fileStorage.countFreeSpace());
+        path = new String[]{"root", "dir1", "file1"};
+        fileSystem.file(path,2);
+        assertNotNull(fileSystem.DirExists(new String[]{"root","dir1"}));
     }
 
     @Test(expected = OutOfSpaceException.class)
@@ -137,14 +153,24 @@ public class FileSystemTest {
     //*********************** START RED SUITS TEST ***********************
 
     @Test(expected = OutOfSpaceException.class)
-    public void creatingTwoFileSameNameDiffSizeWithNotEnoughSpaceInTheDisk() throws BadFileNameException, OutOfSpaceException {
+    public void creatingTwoFileSameNameDiffSizeWithSizeLargerThanInTheDisk() throws OutOfSpaceException, BadFileNameException {
         String[] pathFile = {"root", "dir1", "file1"};
         fileSystem.file(pathFile, 3);
-        fileSystem.FileExists(pathFile);
+        Leaf file = fileSystem.FileExists(pathFile);
         fileSystem.file(pathFile, 11);
+        assertEquals(file,fileSystem.FileExists(pathFile));
     }
 
     //*********************** END RED SUITS TEST ***********************
+
+    @Test(expected = BadFileNameException.class)
+    public void creatingFileSameNameAsExistingDir() throws BadFileNameException, OutOfSpaceException {
+        String[] path = {"root","dir1"};
+        fileSystem.dir(path);
+        assertNotNull(fileSystem.DirExists(path));
+        fileSystem.file(path,1);
+        assertNull(fileSystem.FileExists(path));
+    }
 
 
     // trying to create a file with the same name of existing directory
